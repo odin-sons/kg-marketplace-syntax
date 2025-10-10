@@ -1,0 +1,253 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/source/tmlanguage.json",
+    "name": "KG Marketplace",
+    "patterns": [
+        {
+            "include": "#escapes"
+        },
+        {
+            "match": "^(Talk|Kill|Collect|Craft|Explore|Build|Escort|Defend|Trade|Harvest|Move)\\s*$",
+            "name": "storage.type"
+        },
+        {
+            "match": "^(?<=^(?:Talk|Kill|Collect|Craft|Explore|Build|Escort|Defend|Trade|Harvest|Move)\\s*$\n)([^\\[\\]\\s][^\n]*?)$",
+            "name": "entity.name.class"
+        },
+        {
+            "match": "\\b(\\d+)\\b",
+            "name": "constant.numeric"
+        },
+        {
+            "match": "\\b(Skill)\\b",
+            "name": "constant.language"
+        },
+        {
+            "include": "#section"
+        },
+        {
+            "include": "#color-tags"
+        },
+        {
+            "include": "#image-tags"
+        },
+        {
+            "include": "#html-tags"
+        },
+        {
+            "include": "#variables"
+        },
+        {
+            "include": "#dialog-options"
+        },
+        {
+            "include": "#territory-flags"
+        },
+        {
+            "include": "#coordinates"
+        },
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#quest-type"
+        }
+    ],
+    "repository": {
+        "escapes": {
+            "patterns": [
+                {
+                    "match": "\\\\n",
+                    "name": "constant.character.escape"
+                }
+            ]
+        },
+        "comments": {
+            "patterns": [
+                {
+                    "name": "comment.line.number-sign",
+                    "match": "#.*$"
+                }
+            ]
+        },
+        "section": {
+            "patterns": [
+                {
+                    "name": "entity.name.section",
+                    "match": "\\[(.*?)\\]"
+                }
+            ]
+        },
+        "dialog-options": {
+            "patterns": [
+                {
+                    "begin": "(Text|Transition|RandomTransition|Command|Icon|Condition|AlwaysVisible|Color|OverrideError):\\s*",
+                    "end": "(?=\\s*\\||$)",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.control"
+                        }
+                    },
+                    "contentName": "string.unquoted",
+                    "patterns": [
+                        { "include": "#escapes" },
+                        { "include": "#color-tags" },
+                        { "include": "#image-tags" },
+                        { "include": "#html-tags" },
+                        { "include": "#variables" }
+                    ]
+                },
+                {
+                    "match": "\\|(?=\\s*(?:Text|Transition|RandomTransition|Command|Icon|Condition|AlwaysVisible|Color|OverrideError):)",
+                    "name": "keyword.operator.separator"
+                },
+                {
+                    "match": "([A-Z]\\w*)(?=:)",
+                    "name": "entity.other.attribute-name"
+                }
+            ]
+        },
+        "territory-flags": {
+            "patterns": [
+                {
+                    "match": "\\b(Circle|Square|Custom|PushAway|NoBuild|NoPickaxe|NoInteract|NoAttack|PvpOnly|PveOnly|PeriodicHeal|PeriodicDamage|NoMonsters|CustomEnvironment|MoveSpeedMultiplier|NoDeathPenalty|NoPortals|PeriodicHealALL|ForceGroundHeight|ForceBiome|AddGroundHeight|NoBuildDamage|MonstersAddStars|InfiniteFuel)\\b",
+                    "name": "constant.language"
+                }
+            ]
+        },
+        "coordinates": {
+            "patterns": [
+                {
+                    "match": "\\b\\d+\\s*,\\s*\\d+\\s*,\\s*\\d+\\b",
+                    "name": "constant.numeric"
+                }
+            ]
+        },
+        "variables": {
+            "patterns": [
+                {
+                    "match": "%\\w+%",
+                    "name": "variable.language"
+                }
+            ]
+        },
+        "quest-type": {
+            "patterns": [
+                {
+                    "match": "^(Quest Target Prefab|QuestRewardType|QuestRequirementType|In-Game Days Cooldown|Quest Time Limit):",
+                    "name": "entity.other.attribute-name.quest-field"
+                },
+                {
+                    "match": "\\b(Amount|Level|MinLevel)\\b",
+                    "name": "variable.parameter"
+                },
+                {
+                    "match": "\\b(\\d+)\\b",
+                    "name": "constant.numeric"
+                },
+                {
+                    "match": "\\b(Skill)\\b",
+                    "name": "constant.language.requirement-type"
+                }
+            ]
+        },
+        "color-tags": {
+            "patterns": [
+                {
+                    "begin": "(<)(color)(=)(#[0-9A-Fa-f]{6})(>)",
+                    "end": "(<\\/)(color)(>)",
+                    "beginCaptures": {
+                        "1": { "name": "punctuation.definition.tag.begin" },
+                        "2": { "name": "entity.name.tag" },
+                        "3": { "name": "punctuation.separator.key-value" },
+                        "4": { "name": "constant.other.color.hex" },
+                        "5": { "name": "punctuation.definition.tag.end" }
+                    },
+                    "endCaptures": {
+                        "1": { "name": "punctuation.definition.tag.begin" },
+                        "2": { "name": "entity.name.tag" },
+                        "3": { "name": "punctuation.definition.tag.end" }
+                    },
+                    "name": "meta.tag.color",
+                    "contentName": "markup.styled",
+                    "patterns": [
+                        { "include": "#color-tags" },
+                        { "include": "#image-tags" },
+                        { "include": "#html-tags" },
+                        { "include": "#variables" }
+                    ]
+                }
+            ]
+        },
+        "image-tags": {
+            "match": "(<)(image)(=)([^>]*)(>)",
+            "captures": {
+                "1": { "name": "punctuation.definition.tag.begin" },
+                "2": { "name": "entity.name.tag" },
+                "3": { "name": "punctuation.separator.key-value" },
+                "4": { "name": "string.unquoted.image-path" },
+                "5": { "name": "punctuation.definition.tag.end" }
+            }
+        },
+        "html-tags": {
+            "patterns": [
+                {
+                    "begin": "(<)(b)(>)",
+                    "end": "(<\\/)(b)(>)",
+                    "beginCaptures": {
+                        "1": { "name": "punctuation.definition.tag.begin" },
+                        "2": { "name": "entity.name.tag" },
+                        "3": { "name": "punctuation.definition.tag.end" }
+                    },
+                    "endCaptures": {
+                        "1": { "name": "punctuation.definition.tag.begin" },
+                        "2": { "name": "entity.name.tag" },
+                        "3": { "name": "punctuation.definition.tag.end" }
+                    },
+                    "name": "markup.bold",
+                    "patterns": [
+                        { "include": "$self" }
+                    ]
+                },
+                {
+                    "begin": "(<)(i)(>)",
+                    "end": "(<\\/)(i)(>)",
+                    "beginCaptures": {
+                        "1": { "name": "punctuation.definition.tag.begin" },
+                        "2": { "name": "entity.name.tag" },
+                        "3": { "name": "punctuation.definition.tag.end" }
+                    },
+                    "endCaptures": {
+                        "1": { "name": "punctuation.definition.tag.begin" },
+                        "2": { "name": "entity.name.tag" },
+                        "3": { "name": "punctuation.definition.tag.end" }
+                    },
+                    "name": "markup.italic",
+                    "patterns": [
+                        { "include": "$self" }
+                    ]
+                },
+                {
+                    "begin": "(<)(size)(=)(\\d+)(>)",
+                    "end": "(<\\/)(size)(>)",
+                    "beginCaptures": {
+                        "1" : {"name": "punctuation.definition.tag.begin"},
+                        "2" : {"name": "entity.name.tag"},
+                        "3" : {"name": "punctuation.separator.key-value"},
+                        "4" : {"name": "constant.numeric"},
+                        "5" : {"name": "punctuation.definition.tag.end"}
+                    },
+                    "endCaptures": {
+                        "1": { "name": "punctuation.definition.tag.begin" },
+                        "2": { "name": "entity.name.tag" },
+                        "3": { "name": "punctuation.definition.tag.end" }
+                    },
+                    "name": "meta.tag.size",
+                    "patterns": [
+                        { "include": "$self" }
+                    ]
+                }
+            ]
+        }
+    },
+    "scopeName": "source.cfg"
+}

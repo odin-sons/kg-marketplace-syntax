@@ -1,0 +1,40 @@
+{
+  "name": "kg-marketplace-syntax",
+  "displayName": "KG Marketplace Syntax",
+  "description": "Syntax highlighting for KG Marketplace configuration files",
+  "version": "0.0.1",
+  "author": {
+    "name": "Andrew Gurylev",
+    "email": "andrew@gurylev.com",
+    "url": "https://github.com/fogrew"
+  },
+  "publisher": "fogrew",
+  "icon": "icon/icon.jpg",
+  "repository": {
+    "url": "https://github.com/odin-sons/kg-marketplace-syntax.git",
+    "type": "git"
+  },
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "kg-marketplace",
+        "aliases": ["KG Marketplace", "cfg"],
+        "extensions": [".cfg"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "kg-marketplace",
+        "scopeName": "source.cfg",
+        "path": "./syntaxes/kg-marketplace.tmLanguage.json"
+      }
+    ]
+  }
+}
