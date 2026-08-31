@@ -31,7 +31,7 @@ This extension makes it easier to read and edit configuration files used in KG M
 3.  Search for "KG Marketplace Syntax" in the Marketplace.
 4.  Click **Install**.
 
-Alternatively, you can install it from a file by packaging it with `vsce package` and installing it via `Install from VSIX...`.
+Alternatively, you can install it from a file by packaging it with `npx @vscode/vsce package` and installing it via `Install from VSIX...`. See [CONTRIBUTING.md](CONTRIBUTING.md) for a full local build setup.
 
 ## Usage
 

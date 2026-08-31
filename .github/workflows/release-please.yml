@@ -1,0 +1,43 @@
+name: release-please
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+
+  publish:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.release-please.outputs.tag_name }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: npx --yes @vscode/vsce package
+      - name: Attach .vsix to the GitHub Release
+        run: gh release upload "${{ needs.release-please.outputs.tag_name }}" *.vsix
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish to VS Code Marketplace
+        run: npx --yes @vscode/vsce publish --packagePath *.vsix
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
