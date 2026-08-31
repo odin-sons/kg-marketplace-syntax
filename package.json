@@ -9,7 +9,7 @@
     "url": "https://github.com/fogrew"
   },
   "publisher": "fogrew",
-  "icon": "icon/icon.jpg",
+  "icon": "icon/icon.png",
   "repository": {
     "url": "https://github.com/odin-sons/kg-marketplace-syntax.git",
     "type": "git"
