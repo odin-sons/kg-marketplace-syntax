@@ -1,7 +1,5 @@
 # KG Marketplace Syntax Highlighting
 
-English | [По-русски](README.ru.md)
-
 A Visual Studio Code extension that adds syntax highlighting for `.cfg` configuration files of the [**KG's Valheim Marketplace**](https://kg.sayless.eu/marketplace/#Start%20Page).
 
 ## Description
