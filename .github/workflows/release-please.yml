@@ -25,6 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      # For --oidc below: exchanged for a short-lived Marketplace credential,
+      # trusted via a policy configured on the publisher's Marketplace page -
+      # no stored secret. Requires a publisher-side trust policy naming this
+      # repo + this workflow file - see CONTRIBUTING.md.
+      id-token: write
     steps:
       - uses: actions/checkout@v7
         with:
@@ -32,12 +37,14 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-      - run: npx --yes @vscode/vsce package
+      # Pinned to an exact prerelease: OIDC trusted publishing (--oidc, below)
+      # landed 2026-07-23 and isn't in a stable @vscode/vsce release yet - a
+      # bare `npx @vscode/vsce` would resolve to the latest STABLE (3.9.2),
+      # which doesn't have the flag. Bump this once a stable release ships.
+      - run: npx --yes @vscode/vsce@3.9.3-8 package
       - name: Attach .vsix to the GitHub Release
         run: gh release upload "${{ needs.release-please.outputs.tag_name }}" *.vsix
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish to VS Code Marketplace
-        run: npx --yes @vscode/vsce publish --packagePath *.vsix
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: npx --yes @vscode/vsce@3.9.3-8 publish --packagePath *.vsix --oidc
