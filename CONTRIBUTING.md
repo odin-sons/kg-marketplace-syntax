@@ -57,13 +57,9 @@ Merging it does the rest automatically: tags `vX.Y.Z`, publishes a GitHub Releas
 
 To force a specific version instead of what release-please computes (rare — e.g. deliberately jumping to `1.0.0`), add a `Release-As: 1.0.0` footer to a commit message, or edit the version directly in release-please's open PR before merging.
 
-### One-time setup (account configuration — not something an agent should do)
+### One-time setup (credential handling — not something an agent should do)
 
-The `publish` job authenticates to the Marketplace via **OIDC trusted publishing** (`vsce publish --oidc`) — no stored secret, no PAT. GitHub Actions requests a short-lived token scoped to the `marketplace.visualstudio.com` audience (that's what the job's `id-token: write` permission is for) and `vsce` exchanges it for a Marketplace credential. There's nothing to add to GitHub's secrets for this.
-
-What *is* needed once: a **trusted publishing policy** registered on the Marketplace side, naming this exact repo (`odin-sons/kg-marketplace-syntax`) and this exact workflow file (`.github/workflows/release-please.yml`) as allowed to publish for the `fogrew` publisher. Configure it from the publisher management page: <https://marketplace.visualstudio.com/manage/publishers/fogrew>. Until this is registered, the GitHub Release and `.vsix` attachment still work fine (only need the built-in `GITHUB_TOKEN`) — just the Marketplace publish step fails.
-
-This is a very new `@vscode/vsce` feature (merged 2026-07-23) and isn't in a stable release yet — the workflow pins the exact prerelease that has it (`@vscode/vsce@3.9.3-8`, matching `devDependencies`) instead of floating on `latest`. Bump both once a stable release ships with `--oidc`.
+`VSCE_PAT`: a [Personal Access Token](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#get-a-personal-access-token) from the `fogrew` Azure DevOps org, scoped to **Marketplace: Manage**, added as a repository secret (`Settings` → `Secrets and variables` → `Actions`). Without it, the GitHub Release and `.vsix` attachment still work (they only need the built-in `GITHUB_TOKEN`) — just the Marketplace publish step fails.
 
 ### `0.0.1` predates this process
 
