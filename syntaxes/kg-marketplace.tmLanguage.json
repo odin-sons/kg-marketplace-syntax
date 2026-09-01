@@ -9,12 +9,14 @@
             "include": "#strings"
         },
         {
-            "match": "^(Kill|Collect|Harvest|Craft|Talk|Build|Move|KillAndCollect|Use|Activate)\\s*$",
-            "name": "storage.type"
-        },
-        {
-            "match": "^(?<=^(?:Kill|Collect|Harvest|Craft|Talk|Build|Move|KillAndCollect|Use|Activate)\\s*$\n)([^\\[\\]\\s][^\n]*?)$",
-            "name": "entity.name.class"
+            "begin": "^(Kill|Collect|Harvest|Craft|Talk|Build|Move|KillAndCollect|Use|Activate)\\s*$",
+            "beginCaptures": {
+                "1": { "name": "storage.type" }
+            },
+            "end": "^(.*\\S.*)$",
+            "endCaptures": {
+                "1": { "name": "entity.name.class" }
+            }
         },
         {
             "include": "#operators"
