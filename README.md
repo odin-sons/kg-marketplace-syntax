@@ -1,5 +1,7 @@
 # KG Marketplace Syntax Highlighting
 
+[![Test grammar](https://github.com/odin-sons/kg-marketplace-syntax/actions/workflows/test.yml/badge.svg)](https://github.com/odin-sons/kg-marketplace-syntax/actions/workflows/test.yml)
+
 A Visual Studio Code extension that adds syntax highlighting for `.cfg` configuration files of the [**KG's Valheim Marketplace**](https://kg.sayless.eu/marketplace/#Start%20Page).
 
 ## Description
