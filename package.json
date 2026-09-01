@@ -2,7 +2,7 @@
   "name": "kg-marketplace-syntax",
   "displayName": "KG Marketplace Syntax",
   "description": "Syntax highlighting for KG Marketplace configuration files",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": {
     "name": "Andrew Gurylev",
     "email": "andrew@gurylev.com",
@@ -34,8 +34,13 @@
     "languages": [
       {
         "id": "kg-marketplace",
-        "aliases": ["KG Marketplace", "cfg"],
-        "extensions": [".cfg"],
+        "aliases": [
+          "KG Marketplace",
+          "cfg"
+        ],
+        "extensions": [
+          ".cfg"
+        ],
         "configuration": "./language-configuration.json"
       }
     ],
