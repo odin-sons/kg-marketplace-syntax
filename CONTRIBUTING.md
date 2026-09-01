@@ -24,39 +24,19 @@ code --install-extension kg-marketplace-syntax-<version>.vsix
 
 ## Testing grammar changes
 
-Reload the window (`Developer: Reload Window`) after installing to pick up changes, then use `Developer: Inspect Editor Tokens and Scopes` on an open `.cfg` file to see exactly which scope a given token resolved to — this is the fastest way to confirm a regex change did what you meant.
+Reload the window (`Developer: Reload Window`) after installing to pick up changes, then use `Developer: Inspect Editor Tokens and Scopes` on an open `.cfg` file to see exactly which scope a given token resolved to — the fastest way to eyeball whether a regex change did what you meant.
 
-For iterating on the regexes themselves without a full package/install/reload loop each time, drive the actual TextMate engine (`vscode-textmate` + `vscode-oniguruma`, the same libraries VS Code itself uses — not a hand-rolled regex test, which won't catch TextMate-specific behavior) from a throwaway script:
+For anything you want to actually keep working, add or extend an assertion in [`test/grammar.test.mjs`](test/grammar.test.mjs) instead of just eyeballing it:
 
-```js
-import { readFileSync } from "node:fs";
-import { createRequire } from "node:module";
-import oniguruma from "vscode-oniguruma";
-import textmate from "vscode-textmate";
-
-const require = createRequire(import.meta.url);
-await oniguruma.loadWASM(readFileSync(require.resolve("vscode-oniguruma/release/onig.wasm")).buffer);
-
-const registry = new textmate.Registry({
-  onigLib: {
-    createOnigScanner: (patterns) => new oniguruma.OnigScanner(patterns),
-    createOnigString: (s) => new oniguruma.OnigString(s),
-  },
-  loadGrammar: async () => JSON.parse(readFileSync("syntaxes/kg-marketplace.tmLanguage.json", "utf8")),
-});
-
-const grammar = await registry.loadGrammar("source.cfg");
-let ruleStack = textmate.INITIAL;
-for (const line of readFileSync("sample.cfg", "utf8").split(/\r?\n/)) {
-  const { tokens, ruleStack: next } = grammar.tokenizeLine(line, ruleStack);
-  for (const t of tokens) console.log(JSON.stringify(line.slice(t.startIndex, t.endIndex)), t.scopes.slice(1));
-  ruleStack = next;
-}
+```bash
+npm test
 ```
 
-**Two non-obvious things this catches that a plain regex test won't:**
+This drives the real TextMate engine (`vscode-textmate` + `vscode-oniguruma`, the same libraries VS Code itself uses — not a hand-rolled regex test, which won't catch TextMate-specific behavior) against [`test/fixtures/sample.cfg`](test/fixtures/sample.cfg) and checks specific `(line, token text, expected scope)` triples. Runs on every push/PR via CI. Add a line to the fixture and an assertion alongside it for anything new you're highlighting.
 
-- Inside a `begin`/`end` block (e.g. the `Text:`/`Command:`/... dialogue-field patterns), only that block's own nested `patterns` array tokenizes the content — root-level `patterns` don't apply there unless you explicitly `include` them too. `^`/`$` inside a nested pattern still anchor to the *whole line*, not to where the content region starts, which trips up any pattern that assumes it starts at a line/string boundary.
+**Two non-obvious things this catches that a plain regex test won't** — both are real bugs this test suite has actually caught:
+
+- Inside a `begin`/`end` block (e.g. the `Text:`/`Command:`/... dialogue-field patterns), only that block's own nested `patterns` array tokenizes the content — root-level `patterns` don't apply there unless you explicitly `include` them too. `^`/`$` inside a nested pattern still anchor to the *whole line*, not to where the content region starts, which trips up any pattern that assumes it starts at a line/string boundary. It also means a lookbehind spanning a literal `\n` across two lines can never match at all — `tokenizeLine()` only ever sees one line's raw text per call.
 - When two patterns could both start matching at the same character position, the one listed **earlier** in its `patterns` array wins — not the more specific one. A generic fallback pattern placed before a more specific one will silently steal its matches.
 
 ## Conventions
