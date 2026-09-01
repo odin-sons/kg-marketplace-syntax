@@ -1,25 +1,30 @@
 {
-    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/source/tmlanguage.json",
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/refs/heads/master/tmlanguage.json",
     "name": "KG Marketplace",
     "patterns": [
         {
             "include": "#escapes"
         },
         {
-            "match": "^(Talk|Kill|Collect|Craft|Explore|Build|Escort|Defend|Trade|Harvest|Move)\\s*$",
+            "include": "#strings"
+        },
+        {
+            "match": "^(Kill|Collect|Harvest|Craft|Talk|Build|Move|KillAndCollect|Use|Activate)\\s*$",
             "name": "storage.type"
         },
         {
-            "match": "^(?<=^(?:Talk|Kill|Collect|Craft|Explore|Build|Escort|Defend|Trade|Harvest|Move)\\s*$\n)([^\\[\\]\\s][^\n]*?)$",
+            "match": "^(?<=^(?:Kill|Collect|Harvest|Craft|Talk|Build|Move|KillAndCollect|Use|Activate)\\s*$\n)([^\\[\\]\\s][^\n]*?)$",
             "name": "entity.name.class"
+        },
+        {
+            "include": "#operators"
         },
         {
             "match": "\\b(\\d+)\\b",
             "name": "constant.numeric"
         },
         {
-            "match": "\\b(Skill)\\b",
-            "name": "constant.language"
+            "include": "#quest-header-tags"
         },
         {
             "include": "#section"
@@ -37,19 +42,34 @@
             "include": "#variables"
         },
         {
+            "include": "#quest-event-fields"
+        },
+        {
+            "include": "#quest-reward-fields"
+        },
+        {
             "include": "#dialog-options"
         },
         {
-            "include": "#territory-flags"
+            "include": "#territory-keywords"
+        },
+        {
+            "include": "#territory-appearance-keys"
         },
         {
             "include": "#coordinates"
         },
         {
-            "include": "#comments"
+            "include": "#conditions"
         },
         {
-            "include": "#quest-type"
+            "include": "#commands"
+        },
+        {
+            "include": "#dialogue-triggers"
+        },
+        {
+            "include": "#comments"
         }
     ],
     "repository": {
@@ -58,6 +78,26 @@
                 {
                     "match": "\\\\n",
                     "name": "constant.character.escape"
+                }
+            ]
+        },
+        "strings": {
+            "patterns": [
+                {
+                    "match": "\"[^\"]*\"",
+                    "name": "string.quoted.double"
+                }
+            ]
+        },
+        "operators": {
+            "patterns": [
+                {
+                    "match": "\\|\\|",
+                    "name": "keyword.operator.logical.or"
+                },
+                {
+                    "match": "!(?=[A-Za-z])",
+                    "name": "keyword.operator.logical.not"
                 }
             ]
         },
@@ -77,10 +117,22 @@
                 }
             ]
         },
+        "quest-header-tags": {
+            "patterns": [
+                {
+                    "match": "(\\[[^\\[\\]=]*=\\s*)(Autocomplete|HiddenAnyCondition|HiddenOtherQuestCondition)(\\s*\\])",
+                    "captures": {
+                        "1": { "name": "entity.name.section" },
+                        "2": { "name": "constant.language" },
+                        "3": { "name": "entity.name.section" }
+                    }
+                }
+            ]
+        },
         "dialog-options": {
             "patterns": [
                 {
-                    "begin": "(Text|Transition|RandomTransition|Command|Icon|Condition|AlwaysVisible|Color|OverrideError):\\s*",
+                    "begin": "(Text|Transition|RandomTransition|Command|RandomCommand|Icon|Condition|AlwaysVisible|Color|OverrideError):\\s*",
                     "end": "(?=\\s*\\||$)",
                     "beginCaptures": {
                         "1": {
@@ -90,14 +142,18 @@
                     "contentName": "string.unquoted",
                     "patterns": [
                         { "include": "#escapes" },
+                        { "include": "#strings" },
+                        { "include": "#operators" },
                         { "include": "#color-tags" },
                         { "include": "#image-tags" },
                         { "include": "#html-tags" },
-                        { "include": "#variables" }
+                        { "include": "#variables" },
+                        { "include": "#conditions" },
+                        { "include": "#commands" }
                     ]
                 },
                 {
-                    "match": "\\|(?=\\s*(?:Text|Transition|RandomTransition|Command|Icon|Condition|AlwaysVisible|Color|OverrideError):)",
+                    "match": "\\|(?=\\s*(?:Text|Transition|RandomTransition|Command|RandomCommand|Icon|Condition|AlwaysVisible|Color|OverrideError):)",
                     "name": "keyword.operator.separator"
                 },
                 {
@@ -106,11 +162,51 @@
                 }
             ]
         },
-        "territory-flags": {
+        "dialogue-triggers": {
             "patterns": [
                 {
-                    "match": "\\b(Circle|Square|Custom|PushAway|NoBuild|NoPickaxe|NoInteract|NoAttack|PvpOnly|PveOnly|PeriodicHeal|PeriodicDamage|NoMonsters|CustomEnvironment|MoveSpeedMultiplier|NoDeathPenalty|NoPortals|PeriodicHealALL|ForceGroundHeight|ForceBiome|AddGroundHeight|NoBuildDamage|MonstersAddStars|InfiniteFuel)\\b",
+                    "match": "^(@interaction|@onopen|@inrange|@outrange)\\b",
+                    "name": "keyword.control.trigger"
+                }
+            ]
+        },
+        "quest-event-fields": {
+            "patterns": [
+                {
+                    "match": "\\b(OnAcceptQuest|OnCancelQuest|OnCompleteQuest|OnQuestTimeout|OnDeath)(?=\\s*:)",
+                    "name": "keyword.control.quest-event"
+                }
+            ]
+        },
+        "quest-reward-fields": {
+            "patterns": [
+                {
+                    "match": "\\b(RandomItem|Item|Skill_EXP|Skill|Pet|EpicMMO_EXP|Cozyheim_EXP|Battlepass_EXP|RustyClasses_EXP|GuildAddLevel|SetCustomValue|AddCustomValue)(?=\\s*:)",
+                    "name": "keyword.control.quest-reward"
+                }
+            ]
+        },
+        "territory-keywords": {
+            "patterns": [
+                {
+                    "match": "\\b(Circle|Square|Rectangle)\\b",
+                    "name": "storage.type.territory-shape"
+                },
+                {
+                    "match": "\\b(PushAway|NoBuild|NoPickaxe|NoInteract|NoAttack|PvpOnly|PveOnly|PeriodicHeal|PeriodicDamage|IncreasedPlayerDamage|IncreasedMonsterDamage|NoMonsters|CustomEnvironment|MoveSpeedMultiplier|NoDeathPenalty|NoPortals|PeriodicHealALL|ForceGroundHeight|ForceBiome|AddGroundHeight|NoBuildDamage|MonstersAddStars|InfiniteFuel|NoInteractItems|NoInteractCraftingStation|NoInteractItemStands|NoInteractChests|NoInteractDoors|NoStructureSupport|NoInteractPortals|CustomPaint|LimitZoneHeight|NoItemLoss|SnowMask|NoMist|InfiniteEitr|InfiniteStamina|DropMultiplier|ForceWind|GodMode|OnlyForGuild|CustomJereSpawner|JoinOtherServer|RevealOnMap|OnlyForFaction)\\b",
                     "name": "constant.language"
+                },
+                {
+                    "match": "\\b(FromCenter|ToCenter|LeftRight|RightLeft|TopBottom|BottomTop|BottomRightTopLeft|TopRightBottomLeft|BottomLeftTopRight|TopLeftBottomRight)\\b",
+                    "name": "constant.language.gradient-direction"
+                }
+            ]
+        },
+        "territory-appearance-keys": {
+            "patterns": [
+                {
+                    "match": "\\b(exp|heightbounds)(?=\\s*:)",
+                    "name": "entity.other.attribute-name"
                 }
             ]
         },
@@ -130,23 +226,19 @@
                 }
             ]
         },
-        "quest-type": {
+        "conditions": {
             "patterns": [
                 {
-                    "match": "^(Quest Target Prefab|QuestRewardType|QuestRequirementType|In-Game Days Cooldown|Quest Time Limit):",
-                    "name": "entity.other.attribute-name.quest-field"
-                },
+                    "match": "\\b(HasItem|NotHasItem|HasBuff|NotHasBuff|SkillMore|SkillLess|GlobalKey|NotGlobalKey|HasQuest|NotHasQuest|QuestProgressDone|QuestProgressNotDone|QuestFinished|QuestNotFinished|EpicMMOLevelMore|EpicMMOLevelLess|CozyheimLevelMore|CozyheimLevelLess|RustyClassesLevelMore|RustyClassesLevelLess|HasAchievement|NotHasAchievement|HasAchievementScore|NotHasAchievementScore|CustomValueMore|CustomValueLess|ModInstalled|NotModInstalled|IronGateStatMore|IronGateStatLess|HasGuildWithName|NotHasGuildWithName|HasGuild|NotHasGuild|GuildLevelMore|GuildLevelLess|GuildHasAchievement|GuildNotHasAchievement|IsVIP|NotIsVIP|HasPlayerKey|NotHasPlayerKey|NPCModelEquals|NotNPCModelEquals|NPCNameEquals|NotNPCNameEquals|HasAnyFaction|NotHasAnyFaction|HasFaction|NotHasFaction|MaxHealthMore|MaxHealthLess|HealthMore|HealthLess|MaxStaminaMore|MaxStaminaLess|StaminaMore|StaminaLess|MaxEitrMore|MaxEitrLess|EitrMore|EitrLess|PlayerHasAllCustomDataKeys|PlayerHasOneOfCustomDataKeys)\\b",
+                    "name": "support.function.condition"
+                }
+            ]
+        },
+        "commands": {
+            "patterns": [
                 {
-                    "match": "\\b(Amount|Level|MinLevel)\\b",
-                    "name": "variable.parameter"
-                },
-                {
-                    "match": "\\b(\\d+)\\b",
-                    "name": "constant.numeric"
-                },
-                {
-                    "match": "\\b(Skill)\\b",
-                    "name": "constant.language.requirement-type"
+                    "match": "\\b(OpenUI|PlaySound|GiveQuest|RemoveQuest|FinishQuest|GiveItemWithData|GiveItem|RemoveItem|SetPlayerData|SpawnXYZWithData|SpawnXYZ|SpawnWithData|Spawn|Teleport|Damage|Heal|GiveBuff|AddPin|PingMap|AddEpicMMOExp|AddCozyheimExp|AddRustyClassesEXP|PlayAnimation|EnterPassword|GuildAddLevel|Battlepass_EXP|ConsoleCommand|AddCustomValue|SetCustomValue|PlayVideo|SendWebhook|AddPlayerKey|RemovePlayerKey|SetPlayerGuildRank|SetPlayerGuild|SetNPCModelLocal|SetNPCModelGlobal|SetNPCNameLocal|SetNPCNameGlobal|SetNPCPatrol|AddFaction|RemoveFaction|RemoveAllFactions)\\b",
+                    "name": "support.function.command"
                 }
             ]
         },
