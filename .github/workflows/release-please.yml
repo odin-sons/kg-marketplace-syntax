@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Existing release tag to (re)publish, e.g. kg-marketplace-syntax-v0.1.0 - for retrying the publish step without waiting for a new release"
+        description: "Tag of an existing GitHub Release to (re)publish - copy it from the repo's Releases page"
         required: true
 
 permissions:
