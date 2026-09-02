@@ -3,6 +3,11 @@ name: release-please
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to (re)publish, e.g. kg-marketplace-syntax-v0.1.0 - for retrying the publish step without waiting for a new release"
+        required: true
 
 permissions:
   contents: write
@@ -11,6 +16,7 @@ permissions:
 
 jobs:
   release-please:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
@@ -21,20 +27,26 @@ jobs:
 
   publish:
     needs: release-please
-    if: ${{ needs.release-please.outputs.release_created }}
+    if: |
+      always() &&
+      (github.event_name == 'workflow_dispatch' || needs.release-please.outputs.release_created)
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      - id: tag
+        run: echo "tag=${{ github.event_name == 'workflow_dispatch' && inputs.tag || needs.release-please.outputs.tag_name }}" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v7
         with:
-          ref: ${{ needs.release-please.outputs.tag_name }}
+          ref: ${{ steps.tag.outputs.tag }}
       - uses: actions/setup-node@v7
         with:
           node-version: 22
       - run: npx --yes @vscode/vsce package
       - name: Attach .vsix to the GitHub Release
-        run: gh release upload "${{ needs.release-please.outputs.tag_name }}" *.vsix
+        # --clobber: a manual workflow_dispatch re-run targets a tag that may
+        # already have this asset attached from a prior attempt.
+        run: gh release upload "${{ steps.tag.outputs.tag }}" *.vsix --clobber
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish to VS Code Marketplace
