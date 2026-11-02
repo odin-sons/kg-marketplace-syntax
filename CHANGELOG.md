@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/odin-sons/kg-marketplace-syntax/compare/kg-marketplace-syntax-v0.1.0...kg-marketplace-syntax-v0.2.0) (2026-11-02)
+
+
+### Features
+
+* add ZoneMusic flag and ForceQuestCooldown command ([72203e0](https://github.com/odin-sons/kg-marketplace-syntax/commit/72203e0df9bb1683cf73ce2add39d4f5dafe9fc3))
+
 ## [0.1.0](https://github.com/odin-sons/kg-marketplace-syntax/compare/kg-marketplace-syntax-v0.0.1...kg-marketplace-syntax-v0.1.0) (2026-09-01)
 
 
