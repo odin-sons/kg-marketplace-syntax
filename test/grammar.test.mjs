@@ -59,6 +59,8 @@ const assertions = [
   { line: 28, text: "GiveItemWithData", scope: "support.function.command" },
   { line: 29, text: "HasAchievement", scope: "support.function.condition" },
   { line: 29, text: "GiveItem", scope: "support.function.command" },
+  { line: 30, text: "ForceQuestCooldown", scope: "support.function.command" },
+  { line: 30, text: "SetPlayerGuildRank", scope: "support.function.command" },
 
   // Territories
   { line: 34, text: "Rectangle", scope: "storage.type.territory-shape" },
@@ -67,6 +69,7 @@ const assertions = [
   { line: 36, text: "TopLeftBottomRight", scope: "constant.language.gradient-direction" },
   { line: 37, text: "NoAttack", scope: "constant.language" },
   { line: 37, text: "NoInteractPortals", scope: "constant.language" },
+  { line: 37, text: "ZoneMusic", scope: "constant.language" },
 
   // Comments
   { line: 0, text: "# Quests", scope: "comment.line.number-sign" },

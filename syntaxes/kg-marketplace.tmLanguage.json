@@ -195,7 +195,7 @@
                     "name": "storage.type.territory-shape"
                 },
                 {
-                    "match": "\\b(PushAway|NoBuild|NoPickaxe|NoInteract|NoAttack|PvpOnly|PveOnly|PeriodicHeal|PeriodicDamage|IncreasedPlayerDamage|IncreasedMonsterDamage|NoMonsters|CustomEnvironment|MoveSpeedMultiplier|NoDeathPenalty|NoPortals|PeriodicHealALL|ForceGroundHeight|ForceBiome|AddGroundHeight|NoBuildDamage|MonstersAddStars|InfiniteFuel|NoInteractItems|NoInteractCraftingStation|NoInteractItemStands|NoInteractChests|NoInteractDoors|NoStructureSupport|NoInteractPortals|CustomPaint|LimitZoneHeight|NoItemLoss|SnowMask|NoMist|InfiniteEitr|InfiniteStamina|DropMultiplier|ForceWind|GodMode|OnlyForGuild|CustomJereSpawner|JoinOtherServer|RevealOnMap|OnlyForFaction)\\b",
+                    "match": "\\b(PushAway|NoBuild|NoPickaxe|NoInteract|NoAttack|PvpOnly|PveOnly|PeriodicHeal|PeriodicDamage|IncreasedPlayerDamage|IncreasedMonsterDamage|NoMonsters|CustomEnvironment|MoveSpeedMultiplier|NoDeathPenalty|NoPortals|PeriodicHealALL|ForceGroundHeight|ForceBiome|AddGroundHeight|NoBuildDamage|MonstersAddStars|InfiniteFuel|NoInteractItems|NoInteractCraftingStation|NoInteractItemStands|NoInteractChests|NoInteractDoors|NoStructureSupport|NoInteractPortals|CustomPaint|LimitZoneHeight|NoItemLoss|SnowMask|NoMist|InfiniteEitr|InfiniteStamina|DropMultiplier|ForceWind|GodMode|OnlyForGuild|CustomJereSpawner|JoinOtherServer|RevealOnMap|OnlyForFaction|ZoneMusic)\\b",
                     "name": "constant.language"
                 },
                 {
@@ -239,7 +239,7 @@
         "commands": {
             "patterns": [
                 {
-                    "match": "\\b(OpenUI|PlaySound|GiveQuest|RemoveQuest|FinishQuest|GiveItemWithData|GiveItem|RemoveItem|SetPlayerData|SpawnXYZWithData|SpawnXYZ|SpawnWithData|Spawn|Teleport|Damage|Heal|GiveBuff|AddPin|PingMap|AddEpicMMOExp|AddCozyheimExp|AddRustyClassesEXP|PlayAnimation|EnterPassword|GuildAddLevel|Battlepass_EXP|ConsoleCommand|AddCustomValue|SetCustomValue|PlayVideo|SendWebhook|AddPlayerKey|RemovePlayerKey|SetPlayerGuildRank|SetPlayerGuild|SetNPCModelLocal|SetNPCModelGlobal|SetNPCNameLocal|SetNPCNameGlobal|SetNPCPatrol|AddFaction|RemoveFaction|RemoveAllFactions)\\b",
+                    "match": "\\b(OpenUI|PlaySound|GiveQuest|RemoveQuest|FinishQuest|GiveItemWithData|GiveItem|RemoveItem|SetPlayerData|SpawnXYZWithData|SpawnXYZ|SpawnWithData|Spawn|Teleport|Damage|Heal|GiveBuff|AddPin|PingMap|AddEpicMMOExp|AddCozyheimExp|AddRustyClassesEXP|PlayAnimation|EnterPassword|GuildAddLevel|Battlepass_EXP|ConsoleCommand|AddCustomValue|SetCustomValue|PlayVideo|SendWebhook|AddPlayerKey|RemovePlayerKey|SetPlayerGuildRank|SetPlayerGuild|SetNPCModelLocal|SetNPCModelGlobal|SetNPCNameLocal|SetNPCNameGlobal|SetNPCPatrol|AddFaction|RemoveFaction|RemoveAllFactions|ForceQuestCooldown)\\b",
                     "name": "support.function.command"
                 }
             ]
