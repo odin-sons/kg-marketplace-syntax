@@ -61,6 +61,7 @@ const assertions = [
   { line: 29, text: "GiveItem", scope: "support.function.command" },
   { line: 30, text: "ForceQuestCooldown", scope: "support.function.command" },
   { line: 30, text: "SetPlayerGuildRank", scope: "support.function.command" },
+  { line: 39, text: "TimeOfDayBetween", scope: "support.function.condition" },
 
   // Territories
   { line: 34, text: "Rectangle", scope: "storage.type.territory-shape" },
