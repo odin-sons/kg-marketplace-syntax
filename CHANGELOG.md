@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.0](https://github.com/odin-sons/kg-marketplace-syntax/compare/kg-marketplace-syntax-v0.1.0...kg-marketplace-syntax-v0.2.0) (2026-11-15)
+
+
+### Features
+
+* add ZoneMusic flag and ForceQuestCooldown command ([72203e0](https://github.com/odin-sons/kg-marketplace-syntax/commit/72203e0df9bb1683cf73ce2add39d4f5dafe9fc3))
+* highlight the TimeOfDayBetween condition ([db20a17](https://github.com/odin-sons/kg-marketplace-syntax/commit/db20a17eda2f294a59463ff288d38abce95b7faf))
+
 ## [0.1.0](https://github.com/odin-sons/kg-marketplace-syntax/compare/kg-marketplace-syntax-v0.0.1...kg-marketplace-syntax-v0.1.0) (2026-09-01)
 
 
